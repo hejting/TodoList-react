@@ -19,14 +19,47 @@ export default class App extends Component {
     this.setState({ todoList: newTodoList });
   };
 
+  updateTodo = (id, done) => {
+    const { todoList } = this.state;
+    const newTodoList = todoList.map((todoObj) => {
+      if (id === todoObj.id) return { ...todoObj, done };
+      else return todoObj;
+    });
+    this.setState({ todoList: newTodoList });
+  };
+
+  delTodo = (id) => {
+    const { todoList } = this.state;
+    const newTodoList = todoList.filter((item) => item.id !== id);
+    this.setState({ todoList: newTodoList });
+  };
+
+  checkAllTodo = (done) => {
+    const { todoList } = this.state;
+    const newTodoList = todoList.map((item) => {
+      return { ...item, done };
+    });
+    this.setState({ todoList: newTodoList });
+  };
+
+  delTodoDone = () => {
+    const { todoList } = this.state;
+    const newTodoList = todoList.filter((item) => !item.done);
+    this.setState({ todoList: newTodoList });
+  }
+
   render() {
     const { todoList } = this.state;
     return (
       <div className="todo-container">
         <div className="todo-wrap">
           <Header addTodo={this.addTodo} />
-          <List todoList={todoList} />
-          <Footer />
+          <List
+            todoList={todoList}
+            updateTodo={this.updateTodo}
+            delTodo={this.delTodo}
+          />
+          <Footer todoList={todoList} checkAllTodo={this.checkAllTodo} delTodoDone={this.delTodoDone} />
         </div>
       </div>
     );
